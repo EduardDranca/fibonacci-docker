@@ -1,0 +1,24 @@
+{
+  "name": "worker",
+  "version": "1.0.0",
+  "description": "Calculates the fibonacci number for a given index and saves it to a redis database.",
+  "main": "index.ts",
+  "compilerOptions": {
+    "module": "CommonJS"
+  },
+  "scripts": {
+    "start": "npx tsc && node ./dist/index.js",
+    "dev": "concurrently \"npx tsc -w\" \"nodemon ./dist/index.js\""
+  },
+  "author": "eddranca@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^17.0.21",
+    "@types/redis": "^4.0.11",
+    "concurrently": "^7.0.0",
+    "minimist": "^1.2.6",
+    "nodemon": "^2.0.15",
+    "redis": "^4.0.4",
+    "typescript": "^4.6.2"
+  }
+}

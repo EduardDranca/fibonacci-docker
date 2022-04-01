@@ -1,0 +1,11 @@
+FROM node:16-alpine
+USER node
+RUN mkdir -p /home/node/app
+WORKDIR /home/node/app
+RUN pwd
+COPY --chown=node:node ./package.json ./
+RUN ls
+RUN npm install
+COPY --chown=node:node . .
+
+CMD ["npm", "run", "dev"]
