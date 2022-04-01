@@ -1,0 +1,17 @@
+name: Deploy Fibonacci Service
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build docker image
+      run: docker build -t eddranca/fibonacci-frontend-test -f ./Frontend/Dockerfile.dev ./Frontend
+      - name: Test
+      run: docker run -e CI=true eddranca/fibonacci-frontend-test npm run test
