@@ -1,48 +1,33 @@
 version: '3'
 services:
-  postgres:
-    image: 'postgres:latest'
-    environment:
-      - POSTGRES_PASSWORD=postgres_password
-  redis:
-    image: 'redis:latest'
   nginx:
+    image: 'eddranca/fibonacci-nginx'
+    mem_limit: 128m
     depends_on:
       - api
       - frontend
     restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
     ports:
-      - '3000:80'
+      - '80:80'
+    hostname: nginx
   api:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./Server
-    volumes:
-      - /home/node/app/node_modules
-      - ./Server:/home/node/app
+    image: 'eddranca/fibonacci-server'
     environment:
-      - REDIS_URL=redis:6379
-      - PG_USER=postgres
-      - PG_HOST=postgres
-      - PG_DATABASE=postgres
-      - PG_PASSWORD=postgres_password
-      - PG_PORT=5432
+      - REDIS_URL=$REDIS_URL
+      - PG_USER=$PG_USER
+      - PG_HOST=$PG_HOST
+      - PG_DATABASE=$PG_DATABASE
+      - PG_PASSWORD=$PG_PASSWORD
+      - PG_PORT=$PG_PORT
+    mem_limit: 128m
+    hostname: api
   frontend:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./Frontend
-    volumes:
-      - /home/node/app/node_modules
-      - ./Frontend:/home/node/app
+    image: 'eddranca/fibonacci-frontend'
+    mem_limit: 128m
+    hostname: frontend
   worker:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./Worker
-    volumes:
-      - /home/node/app/node_modules
-      - ./Worker:/home/node/app
+    image: 'eddranca/fibonacci-worker'
+    mem_limit: 128m
+    hostname: worker
     environment:
-      - REDIS_URL=redis:6379
+      - REDIS_URL=$REDIS_URL

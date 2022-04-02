@@ -16,6 +16,7 @@ jobs:
       - name: Test
         run: docker run -e CI=true eddranca/fibonacci-frontend-test npm run test
   dockerfiles:
+    needs: test-frontend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -57,3 +58,18 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: eddranca/fibonacci-nginx
+  deploy:
+    needs: dockerfiles
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy docker files to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          application_name: docker-fibonacci
+          environment_name: Dockerfibonacci-env
+          existing_bucket_name: elasticbeanstalk-eu-central-1-681919286903
+          region: eu-central-1
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
