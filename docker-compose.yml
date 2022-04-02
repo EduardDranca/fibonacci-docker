@@ -19,7 +19,7 @@ services:
       - PG_DATABASE=$PG_DATABASE
       - PG_PASSWORD=$PG_PASSWORD
       - PG_PORT=$PG_PORT
-    mem_limit: 128m
+    mem_limit: 512m
     hostname: api
   frontend:
     image: 'eddranca/fibonacci-frontend'
@@ -27,7 +27,7 @@ services:
     hostname: frontend
   worker:
     image: 'eddranca/fibonacci-worker'
-    mem_limit: 128m
+    mem_limit: 512m
     hostname: worker
     environment:
       - REDIS_URL=$REDIS_URL
